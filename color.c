@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_mandelbrot.c                                 :+:      :+:    :+:   */
+/*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 12:56:03 by alex              #+#    #+#             */
-/*   Updated: 2023/12/08 17:52:55 by alex             ###   ########.fr       */
+/*   Created: 2023/12/12 16:45:41 by acronert          #+#    #+#             */
+/*   Updated: 2023/12/13 16:49:48 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractal.h"
 
-
-void	print_mandelbrot(int **pixel)
+void ft_color(int iter, int max_iter, int color_cycle, char *buf)
 {
-	int	x;
-	int	y;
-	int	pixel_color;
+	int color_index;
+	double hue;
 
-	y = 0;
-	while (y < DISPLAY_HEIGHT)
+	if (iter != max_iter)
 	{
-		x = 0;
-		while (x < DISPLAY_WIDTH)
-		{
-			pixel_color = ((double)pixel[x][y] / MAX_ITERATION) * 232 + 0;
-			printf("\x1b[38;5;%dm\u2588\u2588\x1b[0m", (int)pixel_color);
-			x++;
-		}
-		printf ("\n");
-		y++;
+		color_index = iter % color_cycle;
+		hue = (double)color_index / color_cycle;
+		buf[1] = (char)(9 * (1 - hue) * pow(hue, 3) * 255);
+		buf[2] = (char)(15 * pow((1 - hue), 2) * pow(hue, 2) * 255);
+		buf[0] = (char)(8.5 * pow((1 - hue), 3) * hue * 255);
+	}
+	else
+	{
+		buf[0] = 0;
+		buf[1] = 0;
+		buf[2] = 0;
 	}
 }

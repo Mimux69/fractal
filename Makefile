@@ -6,35 +6,40 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/08 12:10:43 by alex              #+#    #+#              #
-#    Updated: 2023/12/08 17:42:26 by alex             ###   ########.fr        #
+#    Updated: 2023/12/13 17:36:07 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= 	fract-ol
-FLAGS	= 	-Wall -Wextra -Werror
+NAME	=	fractol
+FLAGS	=	-Wall -Wextra -Werror 
+MLFLAGS	=	-LX11 -LXext -Lmlx -Lm -lX11 -lXext -lm
 CC		=	cc
 FILES	=	main \
 			mandelbrot \
-			print_mandelbrot
-HEADERS	=	fractal.h \
-			./ft_printf/ft_printf.h \
-			./libft/libft.h
+			julia \
+			ft_atod \
+			input \
+			color \
+			burning_ship \
+			buddhabrot
+HEADERS	=	-Ift_printf/ -Ilibft/ -Iminilibx-linux
+LIBS	=	./libft/libft.a ./ft_printf/libftprintf.a minilibx-linux/libmlx.a minilibx-linux/libmlx_Linux.a
 OBJS	= 	$(addsuffix .o, $(FILES))
 SRCS	= 	$(addsuffix .c, $(FILES))
 
 all: $(NAME)
 
-$(NAME): $(OBJS) libft libftprintf
-	$(CC) $(FLAGS) -Ift_printf/ -Ilibft/ -o $(NAME) $(OBJS) ./libft/libft.a ./ft_printf/libftprintf.a
+$(NAME): libft.a libftprintf.a
+	$(CC) $(FLAGS) -o $(NAME) $(SRCS) $(HEADERS) $(LIBS) $(MLFLAGS)
 
-libft:
+libft.a:
 	make -C libft re
 
-libftprintf:
+libftprintf.a:
 	make -C ft_printf re
 
 %.o : %.c 
-	$(CC) $(FLAGS) -Ift_printf/ -Ilibft/ -c $<
+	$(CC) $(FLAGS) $(MLFLAGS) -Ift_printf/ -Ilibft/ -Iminilibx-linux minilibx-linux/libmlx.a minilibx-linux/libmlx_Linux.a -LX11 -LXext -c $<
 
 clean:
 	rm -f $(OBJS)
